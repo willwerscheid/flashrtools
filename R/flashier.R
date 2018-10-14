@@ -101,8 +101,8 @@ get_stopping_rule <- function(method, custom_stopping_rule) {
 
 get_verbose_output <- function(method, custom_verbose_output) {
   return(switch(method,
-                fastest = "od",
-                nnloadings = "odL",
-                nnfactors = "odF",
+                fastest = "odn",
+                nnloadings = "odLn",
+                nnfactors = "odFn",
                 custom = custom_verbose_output))
 }
