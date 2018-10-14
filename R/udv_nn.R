@@ -1,7 +1,11 @@
+# Initialize a nonnegative factor (with no constraints on loadings).
+#
 udv_nnfactors <- function(Y, K = 1) {
   return(udv_nn(Y, K, "factors"))
 }
 
+# Initialize a nonnegative loading vector (with no constraints on factors).
+#
 udv_nnloadings <- function(Y, K = 1) {
   return(udv_nn(Y, K, "loadings"))
 }
