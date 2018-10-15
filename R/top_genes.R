@@ -35,3 +35,26 @@ get_top_genes <- function(fl,
 
   return(ret)
 }
+
+find_genes_in_kset <- function(fl,
+                               gene_IDs,
+                               cutoff = 0.05,
+                               where = c("loadings", "factors")) {
+  where <- match.arg(where)
+
+  vals <- switch(where,
+                 loadings = fl$ldf$l,
+                 factors = fl$ldf$f)
+  ret <- list()
+
+  for (gene_ID in gene_IDs) {
+    if (!(gene_ID %in% row.names(vals))) {
+      warning("Gene ", gene_ID, " not found.")
+    } else {
+      gene_vals <- vals[gene_ID, ]
+      ret[[gene_ID]] <- which(gene_vals > cutoff)
+    }
+  }
+
+  return(ret)
+}
