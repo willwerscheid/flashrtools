@@ -28,9 +28,9 @@ get_top_genes <- function(fl,
     gene_desc <- bm_info$wikigene_description
     names(gene_desc) <- bm_info$external_gene_name
 
-    ret[[k]] <- data.frame(geneID = gene_IDs,
-                           val = vals[gene_IDs],
-                           desc = gene_desc[gene_IDs])
+    ret[[as.character(k)]] <- data.frame(geneID = gene_IDs,
+                                         val = vals[gene_IDs],
+                                         desc = gene_desc[gene_IDs])
   }
 
   return(ret)
