@@ -18,17 +18,21 @@ flashier <- function(data,
                      ebnm_fn = NULL,
                      ebnm_param = NULL,
                      stopping_rule = NULL,
-                     verbose_output = NULL,
-                     tol = 1e-2) {
-
+                     tol = NULL,
+                     verbose_output = NULL) {
   method <- match.arg(method)
-  init_fn <- get_init_fn(method, init_fn)
-  ebnm_fn <- get_ebnm_fn(method, ebnm_fn)
-  ebnm_param <- get_ebnm_param(method, ebnm_param)
-  stopping_rule <- get_stopping_rule(method, stopping_rule)
-  verbose_output <- ifelse(verbose,
-                           get_verbose_output(method, verbose_output),
-                           "")
+
+  default <- get_method_defaults(method)
+  init_fn <- override_default(default$init_fn, init_fn)
+  ebnm_fn <- override_default(default$ebnm_fn, ebnm_fn)
+  ebnm_param <- override_default(default$ebnm_param, ebnm_param)
+  stopping_rule <- override_default(default$stopping_rule, stopping_rule)
+  tol <- override_default(default$tol, tol)
+  verbose_output <- override_default(default$verbose_output, verbose_output)
+
+  if (!verbose) {
+    verbose_output <- ""
+  }
 
   if (greedy) {
     fl <- flashr:::flash_greedy_workhorse(data = data,
@@ -62,47 +66,10 @@ flashier <- function(data,
   return(fl)
 }
 
-get_init_fn <- function(method, custom_init_fn) {
-  return(switch(method,
-                fastest = "udv_si",
-                nnloadings = "udv_nnloadings",
-                nnfactors = "udv_nnfactors",
-                custom = custom_init_fn))
-}
-
-get_ebnm_fn <- function(method, custom_ebnm_fn) {
-  return(switch(method,
-                fastest = "ebnm_pn",
-                nnloadings = "ebnm_ash",
-                nnfactors = "ebnm_ash",
-                custom = custom_ebnm_fn))
-}
-
-get_ebnm_param <- function(method, custom_ebnm_param) {
-  nn_param <- list(mixcompdist = "+uniform",
-                   optmethod = "mixSQP")
-  ash_param <- list(mixcompdist = "normal",
-                    optmethod = "mixSQP")
-
-  return(switch(method,
-                fastest = NULL,
-                nnloadings = list(l = nn_param, f = ash_param),
-                nnfactors = list(l = ash_param, l = nn_param),
-                custom = custom_ebnm_param))
-}
-
-get_stopping_rule <- function(method, custom_stopping_rule) {
-  return(switch(method,
-                fastest = "objective",
-                nnloadings = "loadings",
-                nnfactors = "factors",
-                custom = custom_stopping_rule))
-}
-
-get_verbose_output <- function(method, custom_verbose_output) {
-  return(switch(method,
-                fastest = "odn",
-                nnloadings = "odLn",
-                nnfactors = "odFn",
-                custom = custom_verbose_output))
+override_default <- function(default, override) {
+  if (is.null(override)) {
+    return(default)
+  } else {
+    return(override)
+  }
 }
