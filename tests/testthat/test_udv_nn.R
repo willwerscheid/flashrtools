@@ -18,6 +18,15 @@ test_that("udv_nnloadings returns a nonnegative loading", {
   expect_true(all(udv_nnl$v >= 0))
 })
 
-test_that("udv_nn errors out when K > 1", {
+test_that("udv_nnfactors errors out when K > 1", {
   expect_error(udv_nnfactors(Y, K = 2))
 })
+
+test_that("udv_nn returns a nonnegative factor/loading pair", {
+  Y <- pmax(Y, 0)
+  udv_nnlf <- udv_nn(Y)
+  expect_named(udv_nnlf, c("u", "d", "v"))
+  expect_true(all(udv_nnlf$u >= 0))
+  expect_true(all(udv_nnlf$v >= 0))
+})
+

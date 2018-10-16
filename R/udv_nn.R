@@ -1,16 +1,23 @@
+# Initialize a nonnegative factor/loading pair via NNLM.
+#
+udv_nn <- function(Y, K = 1) {
+  WH <- NNLM::nnmf(Y, K, verbose = 0)
+  return(list(u = WH$W, d = rep(1, K), v = WH$H))
+}
+
 # Initialize a nonnegative factor (with no constraints on loadings).
 #
 udv_nnfactors <- function(Y, K = 1) {
-  return(udv_nn(Y, K, "factors"))
+  return(udv_partialnn(Y, K, nn = "factors"))
 }
 
 # Initialize a nonnegative loading vector (with no constraints on factors).
 #
 udv_nnloadings <- function(Y, K = 1) {
-  return(udv_nn(Y, K, "loadings"))
+  return(udv_partialnn(Y, K, nn = "loadings"))
 }
 
-udv_nn <- function(Y, K = 1, nn = c("factors", "loadings")) {
+udv_partialnn <- function(Y, K = 1, nn = c("factors", "loadings")) {
   if (K > 1) {
     stop(paste("K > 1 not yet implemented for nonnegative initialization",
                "functions"))
