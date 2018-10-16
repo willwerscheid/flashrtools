@@ -2,7 +2,7 @@
 #
 udv_nn <- function(Y, K = 1) {
   WH <- NNLM::nnmf(Y, K, verbose = 0)
-  return(list(u = WH$W, d = rep(1, K), v = WH$H))
+  return(list(u = WH$W, d = rep(1, K), v = t(WH$H)))
 }
 
 # Initialize a nonnegative factor (with no constraints on loadings).
