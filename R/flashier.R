@@ -44,16 +44,16 @@ flashier <- function(data,
   }
 
   if (backfit_maxiter > 0) {
-    fl <- flashr::flash_backfit_workhorse(data = data,
-                                          f_init = fl,
-                                          var_type = var_type,
-                                          ebnm_fn = params$ebnm_fn,
-                                          ebnm_param = params$ebnm_param,
-                                          stopping_rule = params$stopping_rule,
-                                          tol = params$tol,
-                                          verbose_output = params$verbose_output,
-                                          nullcheck = nullcheck,
-                                          maxiter = backfit_maxiter)
+    fl <- flashr:::flash_backfit_workhorse(data = data,
+                                           f_init = fl,
+                                           var_type = var_type,
+                                           ebnm_fn = params$ebnm_fn,
+                                           ebnm_param = params$ebnm_param,
+                                           stopping_rule = params$stopping_rule,
+                                           tol = params$tol,
+                                           verbose_output = params$verbose_output,
+                                           nullcheck = nullcheck,
+                                           maxiter = backfit_maxiter)
   }
 
   return(fl)
